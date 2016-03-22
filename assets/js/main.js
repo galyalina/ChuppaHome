@@ -166,6 +166,79 @@ function isEmpty(obj) {
 var map;
 var WMSLayer;
 
+
+function loadBuilding() {
+
+
+    //var vectorSource25833online = new ol.source.Vector({
+    //    format: new ol.format.GeoJSON({
+    //        defaultDataProjection: projection_25833
+    //    }),
+    //    url: function (extent, resolution, projection) {
+    //
+    //        console.log(extent);
+    //    },
+    //    projection: 'EPSG:25833'
+    //});
+    ////
+    //
+    //var buildingsLayer25833 = new ol.layer.Vector({
+    //    source: vectorSource25833online,
+    //    style: new ol.style.Style({
+    //        stroke: new ol.style.Stroke({
+    //            color: 'green',
+    //            width: 8
+    //        })
+    //    })
+    //});
+    //
+    //map.addLayer(buildingsLayer25833);
+
+
+    var vectorSource = new ol.source.Vector({
+        format: new ol.format.GeoJSON({
+            defaultDataProjection: projection_25833
+        }),
+        url: function (extent, resolution, projection) {
+
+            //console.log(extent.join(','));
+            //var box_coords = ol.proj.transform(extent, 'EPSG:3857', projection_25833);
+            //console.log(box_coords.join(','));
+            //console.log('../php/chuppaproxy.php?params=SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=10&outputFormat=application/json&srsname=EPSG:25833&bbox='
+            //    + box_coords.join(',') + ',EPSG:25833');
+            return '../php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833';
+            //return '../php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=10&outputFormat=application/json&srsname=EPSG:25833&bbox='
+            //    + box_coords.join(',')+ ',EPSG:25833';
+            //return '../php/chuppaproxy.php';
+        },
+        strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
+            maxZoom: 19
+        }))
+    });
+
+    var vector = new ol.layer.Vector({
+        source: vectorSource,
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 45
+            })
+        })
+    });
+
+    map.addLayer(vector);
+
+    //http://localhost:63342/CuppaHome/php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833&bbox=400284.2382759188,5803824.444589877,1516510.6411778966,6878109.5532133,EPSG:25833
+
+    //http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/re_alkis_gebaeude?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833&bbox=400284.2382759188,5803824.444589877,1516510.6411778966,6878109.5532133,EPSG:25833
+
+    //console.log(ol.proj.transform([1478597.875148449,6890339.477738928], 'EPSG:4326', projection_25833));
+    //console.log(ol.proj.transform([1479820.8676010119,6891562.470191491], 'EPSG:4326', projection_25833));
+    //console.log(extent.join(','));
+
+}
+
+
 function loadWMSlayer() {
     if (isEmpty(WMSLayer)) {
         WMSLayer = new ol.layer.Image({
@@ -199,130 +272,41 @@ function loadJeoJson() {
 
     map.addLayer(districts);
 
-
-    //var buildings = new ol.layer.Vector({
-    //    source: new ol.source.Vector({
-    //        url: '../res/berlin_building_floors.geojson',
-    //        format: new ol.format.GeoJSON({
-    //            defaultDataProjection: 'EPSG:4326',
-    //            projection: 'EPSG:3857'
-    //        })
-    //
-    //    })
-    //});
-    //
-    //map.addLayer(buildings);
-
-}
-
-
-function loadBuilding() {
-
-    var buildingsLayer = new ol. layer.Vector({
-        title : "Buildings",
+    var buildingsLayer = new ol.layer.Vector({
+        title: "Buildings",
         source: new ol.source.Vector({
             url: '../res/buildings_rent.geojson',
             projection: 'EPSG:4326',
             format: new ol.format.GeoJSON()
         }),
         style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'red',
-                    width: 3
-                })
+            stroke: new ol.style.Stroke({
             })
+        })
     });
 
     map.addLayer(buildingsLayer);
 
 
-    //var buildingsLayer2 = new ol. layer.Vector({
-    //    title : "Buildings",
-    //    source: new ol.source.Vector({
-    //        url: '../res/test_4326.geojson',
-    //        projection: 'EPSG:4326',
-    //        format: new ol.format.GeoJSON()
-    //    }),
-    //    style: new ol.style.Style({
-    //        stroke: new ol.style.Stroke({
-    //            color: 'green',
-    //            width: 10
-    //        })
-    //    })
-    //});
-    //
-    //map.addLayer(buildingsLayer2);
-
-
-    //var vectorSource25833 = new ol.source.Vector({
-    //    url: '../res/test_25833.geojson',
-    //    format: new ol.format.GeoJSON({
-    //        defaultDataProjection: projection_25833
-    //    })
-    //});
-    //
-    //var buildingsLayer25833 = new ol.layer.Vector({
-    //    source: vectorSource25833,
-    //    style: new ol.style.Style({
-    //        stroke: new ol.style.Stroke({
-    //            color: 'green',
-    //            width: 8
-    //        })
-    //    })
-    //});
-    //
-    //map.addLayer(buildingsLayer25833);
-
-
-    var vectorSource25833online = new ol.source.Vector({
+    var vectorSource25833 = new ol.source.Vector({
+        url: '../res/test_25833.geojson',
         format: new ol.format.GeoJSON({
             defaultDataProjection: projection_25833
-        }),
-        url: function (extent, resolution, projection) {
-
-            console.log(extent);
-
-            //var firstBoundry = ol.proj.transform([1478597.875148449,6890339.477738928], 'EPSG:4326', projection_25833);
-            //var secondBoundry =ol.proj.transform([1479820.8676010119,6891562.470191491], 'EPSG:4326', projection_25833);
-            //
-            //console.log(firstBoundry);
-            //console.log(secondBoundry);
-            //
-            //var coords = firstBoundry.join()+','+secondBoundry.join();
-            //console.log(coords);
-            //
-            //console.log('../php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=10&outputFormat=application/json&srsname=EPSG:25833&bbox='
-            //    + extent.join(',')+ ',EPSG:25833');
-            //return '../php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=10&outputFormat=application/json&srsname=EPSG:25833&bbox='
-            //    + extent.join(',')+ ',EPSG:25833';
-        },
-        projection: 'EPSG:25833'
+        })
     });
-    //
 
     var buildingsLayer25833 = new ol.layer.Vector({
-        source: vectorSource25833online,
+        source: vectorSource25833,
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: 'green',
-                width: 8
+                width: 2
             })
         })
     });
 
     map.addLayer(buildingsLayer25833);
-
-
-
-    //
-    //console.log(ol.proj.transform([1478597.875148449,6890339.477738928], 'EPSG:4326', projection_25833));
-    //console.log(ol.proj.transform([1479820.8676010119,6891562.470191491], 'EPSG:4326', projection_25833));
-    //console.log(extent.join(','));
-
-
-
 }
-
 
 $("#hw_trafficlight").click(function () {
 

@@ -1,0 +1,158 @@
+<html>
+<head>
+    <title>Berlin</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="http://openlayers.org/en/v3.11.2/build/ol.js"></script>
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.11.2/css/ol.css" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({source: new ol.source.OSM()})
+                ],
+                view: new ol.View({
+                    center: ol.proj.transform([13.4, 52.512181], 'EPSG:4326', 'EPSG:3857'),
+                    zoom: 12
+                })
+            });
+
+            var wmsLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://fbinter.stadt-berlin.de/fb/wms/senstadt/lsa',
+                    params: {'LAYERS': '1',
+                        'VERSION':'1.3.0',
+                        'STYLES':'gdi_default',
+                        'CRS':'EPSG:4326',
+                        'FORMAT':'image/png'},
+                    projection:'EPSG:4326'
+                })
+            });
+
+            var wmsLayer2 = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '	http://fbinter.stadt-berlin.de/fb/wms/senstadt/gruene_wege_wander',
+                    params: {'LAYERS': '1',
+                        'VERSION':'1.3.0',
+                        'STYLES':'gdi_default',
+                        'CRS':'EPSG:4326',
+                        'FORMAT':'image/png'},
+                    projection:'EPSG:4326'
+                })
+            });
+
+            var wmsLayer3 = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://fbinter.stadt-berlin.de/fb/wms/senstadt/schulen',
+                    params: {'LAYERS': '1',
+                        'VERSION':'1.3.0',
+                        'STYLES':'gdi_default',
+                        'CRS':'EPSG:4326',
+                        'FORMAT':'image/png'},
+                    projection:'EPSG:4326'
+                })
+            });
+
+
+
+            $(".mycheckbox").change(function() {
+                if(this.checked) {
+                    map.addLayer(wmsLayer);
+                }
+                else{
+                    map.removeLayer(wmsLayer);}
+
+            });
+
+
+            $(".mycheckbox2").change(function() {
+                if(this.checked) {
+                    map.addLayer(wmsLayer2);
+                }
+                else{
+                    map.removeLayer(wmsLayer2);}
+
+            });
+
+            $(".mycheckbox3").change(function() {
+                if(this.checked) {
+                    map.addLayer(wmsLayer3);
+                }
+                else{
+                    map.removeLayer(wmsLayer3);}
+
+            });
+
+        });
+    </script>
+</head>
+<body>
+<div id="head" align="center" class="background" >
+    <img src="img/header.jpg" width="40%"/>
+</div>
+<div id="content">
+    <div id="content_left" style="float: left;" >
+        <div class="pnl-custom">
+            <ul class="lst-custom list-group">
+                <li class="list-group-item">
+                    Ampel
+                    <div class="material-switch pull-right">
+                        <input class="myCheckBox" id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox"/>
+                        <label for="someSwitchOptionDefault" class="label-default"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    20 green tracks
+                    <div class="material-switch pull-right">
+                        <input class="myCheckBox2" id="someSwitchOptionPrimary" name="someSwitchOption001" type="checkbox"/>
+                        <label for="someSwitchOptionPrimary" class="label-primary"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Schools
+                    <div class="material-switch pull-right">
+                        <input class="myCheckBox3" id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox"/>
+                        <label for="someSwitchOptionSuccess" class="label-success"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Layer4
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionInfo" name="someSwitchOption001" type="checkbox"/>
+                        <label for="someSwitchOptionInfo" class="label-info"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Layer5
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionWarning" name="someSwitchOption001" type="checkbox"/>
+                        <label for="someSwitchOptionWarning" class="label-warning"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Layer6
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionDanger" name="someSwitchOption001" type="checkbox"/>
+                        <label for="someSwitchOptionDanger" class="label-danger"></label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div id="content_right" align="left">
+        <div id="map" class="map"></div>
+
+    </div>
+
+</div>
+<div id="footer">
+    &copy; Elena Vidyakina
+</div>
+
+
+</body>
+</html>

@@ -5,9 +5,6 @@
  */
 
 
-proj4.defs("EPSG:25833", "+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-var projection_25833 = ol.proj.get('EPSG:25833');
-
 (function ($) {
 
     skel.breakpoints({
@@ -117,206 +114,20 @@ var projection_25833 = ol.proj.get('EPSG:25833');
         if (skel.vars.os == 'wp' && skel.vars.osVersion < 10)
             $('#headerToggle, #header, #main')
                 .css('transition', 'none');
-
     });
-
-
-    map = new ol.Map({
-        target: 'map',
-        layers: [
-            new ol.layer.Tile({source: new ol.source.OSM()})
-        ],
-        view: new ol.View({
-            center: ol.proj.transform([13.4, 52.512181], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 12
-        })
-    });
-
 })(jQuery);
 
 
-$(document).ready(function () {
-    localStorage.trafficlight_on = 0;
-    loadWMSlayer();
-    loadJeoJson();
-    loadBuilding();
-});
-
-
-function isEmpty(obj) {
-
-    // null and undefined are "empty"
-    if (obj == null) return true;
-
-    // Assume if it has a length property with a non-zero value
-    // that that property is correct.
-    if (obj.length > 0)    return false;
-    if (obj.length === 0)  return true;
-
-    // Otherwise, does it have any properties of its own?
-    // Note that this doesn't handle
-    // toString and valueOf enumeration bugs in IE < 9
-    for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) return false;
+$.when(
+    $.getScript("../js/chuppaMain.js"),
+    $.getScript("../js/chuppaloadFeatures.js"),
+    $.getScript("../js/chuppaloadWMS.js"),
+    $.getScript("../js/chuppaOnClickActions.js"),
+    $.getScript("../js/chuppaUtils.js"),
+    $.Deferred(function (deferred) {
+        $(deferred.resolve);
+    })
+).done(function () {
+        onloadFinished();
     }
-
-    return true;
-}
-
-var map;
-var WMSLayer;
-
-
-function loadBuilding() {
-
-
-    //var vectorSource25833online = new ol.source.Vector({
-    //    format: new ol.format.GeoJSON({
-    //        defaultDataProjection: projection_25833
-    //    }),
-    //    url: function (extent, resolution, projection) {
-    //
-    //        console.log(extent);
-    //    },
-    //    projection: 'EPSG:25833'
-    //});
-    ////
-    //
-    //var buildingsLayer25833 = new ol.layer.Vector({
-    //    source: vectorSource25833online,
-    //    style: new ol.style.Style({
-    //        stroke: new ol.style.Stroke({
-    //            color: 'green',
-    //            width: 8
-    //        })
-    //    })
-    //});
-    //
-    //map.addLayer(buildingsLayer25833);
-
-
-    var vectorSource = new ol.source.Vector({
-        format: new ol.format.GeoJSON({
-            defaultDataProjection: projection_25833
-        }),
-        url: function (extent, resolution, projection) {
-
-            //console.log(extent.join(','));
-            //var box_coords = ol.proj.transform(extent, 'EPSG:3857', projection_25833);
-            //console.log(box_coords.join(','));
-            //console.log('../php/chuppaproxy.php?params=SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=10&outputFormat=application/json&srsname=EPSG:25833&bbox='
-            //    + box_coords.join(',') + ',EPSG:25833');
-            return '../php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833';
-            //return '../php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=10&outputFormat=application/json&srsname=EPSG:25833&bbox='
-            //    + box_coords.join(',')+ ',EPSG:25833';
-            //return '../php/chuppaproxy.php';
-        },
-        strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
-            maxZoom: 19
-        }))
-    });
-
-    var vector = new ol.layer.Vector({
-        source: vectorSource,
-        style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: 'red',
-                width: 45
-            })
-        })
-    });
-
-    map.addLayer(vector);
-
-    //http://localhost:63342/CuppaHome/php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833&bbox=400284.2382759188,5803824.444589877,1516510.6411778966,6878109.5532133,EPSG:25833
-
-    //http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/re_alkis_gebaeude?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833&bbox=400284.2382759188,5803824.444589877,1516510.6411778966,6878109.5532133,EPSG:25833
-
-    //console.log(ol.proj.transform([1478597.875148449,6890339.477738928], 'EPSG:4326', projection_25833));
-    //console.log(ol.proj.transform([1479820.8676010119,6891562.470191491], 'EPSG:4326', projection_25833));
-    //console.log(extent.join(','));
-
-}
-
-
-function loadWMSlayer() {
-    if (isEmpty(WMSLayer)) {
-        WMSLayer = new ol.layer.Image({
-            source: new ol.source.ImageWMS({
-                url: 'http://fbinter.stadt-berlin.de/fb/wms/senstadt/lsa',
-                params: {
-                    'LAYERS': '1',
-                    'VERSION': '1.3.0',
-                    'STYLES': 'gdi_default',
-                    'CRS': 'EPSG:4326',
-                    'FORMAT': 'image/png'
-                },
-                projection: 'EPSG:4326'
-            })
-        });
-    }
-}
-
-
-function loadJeoJson() {
-
-    var districts = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            url: '../res/berlin_districts.geojson',
-            format: new ol.format.GeoJSON({
-                projection: 'EPSG:4326'
-            })
-
-        })
-    });
-
-    map.addLayer(districts);
-
-    var buildingsLayer = new ol.layer.Vector({
-        title: "Buildings",
-        source: new ol.source.Vector({
-            url: '../res/buildings_rent.geojson',
-            projection: 'EPSG:4326',
-            format: new ol.format.GeoJSON()
-        }),
-        style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-            })
-        })
-    });
-
-    map.addLayer(buildingsLayer);
-
-
-    var vectorSource25833 = new ol.source.Vector({
-        url: '../res/test_25833.geojson',
-        format: new ol.format.GeoJSON({
-            defaultDataProjection: projection_25833
-        })
-    });
-
-    var buildingsLayer25833 = new ol.layer.Vector({
-        source: vectorSource25833,
-        style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: 'green',
-                width: 2
-            })
-        })
-    });
-
-    map.addLayer(buildingsLayer25833);
-}
-
-$("#hw_trafficlight").click(function () {
-
-    if (localStorage.trafficlight_on > 0) {
-        localStorage.trafficlight_on = 0;
-        map.removeLayer(WMSLayer);
-    } else {
-        localStorage.trafficlight_on = 1;
-        console.log("Try to load WMS");
-        loadWMSlayer();
-        map.addLayer(WMSLayer);
-    }
-});
+);

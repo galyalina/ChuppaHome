@@ -22,6 +22,25 @@
 	</head>
 	<body>
 
+
+	<!-- Scripts -->
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/js/jquery.scrolly.min.js"></script>
+	<script src="../assets/js/jquery.scrollzer.min.js"></script>
+	<script src="../assets/js/skel.min.js"></script>
+	<script src="../assets/js/util.js"></script>
+	<!--[if lte IE 8]>
+	<script src="../assets/js/ie/respond.min.js"></script><![endif]-->
+	<script src="../assets/js/main.js"></script>
+
+
+	<?php
+	function write_file($x)
+	{
+		file_put_contents('../res/district_mitte_limited.geojson', json_encode($x));
+	}
+	?>
+
 		<!-- Header -->
 			<div id="header">
 
@@ -56,6 +75,13 @@
 								<li><a href="#contact" id="contact-link" class="skel-layers-ignoreHref"><span class="icon fa-envelope">Contact</span></a></li>
 							</ul>
 						</nav>
+
+
+					<!-- Logo -->
+					<div id="logo">
+						<h1 id="district">District</h1>
+					</div>
+
 
 				</div>
 
@@ -93,11 +119,20 @@
 
 				<!-- Map-->
 				<section id="map" class="two">
-
+					<form>
+						<select id="district_selection" class="filter">
+							<option value="none" selected>Select district</option>
+<!--							<option value="click" selected></option>-->
+<!--							<option value="singleclick">Single-click</option>-->
+<!--							<option value="pointermove">Hover</option>-->
+<!--							<option value="altclick">Alt+Click</option>-->
+<!--							<option value="none">None</option>-->
+						</select>
+					</form>
 
 					<!-- Social Icons -->
 					<ul class="icons actions ">
-						<li><a href="#" class="icon action fa-tree" id="hw_trafficlight"><span class="label">Twitter</span></a></li>
+						<li><a class="icon action fa-tree" id="hw_trafficlight"><span class="label">Twitter</span></a></li>
 						<li><a href="#" class="icon action fa-smile-o"><span class="label">Facebook</span></a></li>
 						<li><a href="#" class="icon action fa-map-signs"><span class="label">Github</span></a></li>
 						<li><a href="#" class="icon action fa-paw "><span class="label">Dribbble</span></a></li>
@@ -220,16 +255,6 @@
 					</ul>
 
 			</div>
-
-		<!-- Scripts -->
-			<script src="../assets/js/jquery.min.js"></script>
-			<script src="../assets/js/jquery.scrolly.min.js"></script>
-			<script src="../assets/js/jquery.scrollzer.min.js"></script>
-			<script src="../assets/js/skel.min.js"></script>
-			<script src="../assets/js/util.js"></script>
-			<!--[if lte IE 8]>
-		<script src="../assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="../assets/js/main.js"></script>
 
 	</body>
 </html>

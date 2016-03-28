@@ -2055,6 +2055,15 @@ br.clear {
     clear: both;
 }
 
+
+select.filter{
+    font-size: 0.8em;
+    width: 10em;
+}
+
+
+
+
 /* Sections/Article */
 
 section, article {
@@ -2515,6 +2524,7 @@ button:active,
 
 /* Main */
 
+
 #main {
     margin-left: 375px;
 }
@@ -2715,6 +2725,14 @@ button:active,
 
 
     ul.icons a.action {
+        padding-left: 1em;
+        padding-right: 1em;
+        margin: 1em;
+    }
+
+
+    .select input{
+        width: 5em;
         padding-left: 1em;
         padding-right: 1em;
         margin: 1em;

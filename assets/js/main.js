@@ -120,6 +120,7 @@
 
 $.when(
     $.getScript("../js/chuppaMain.js"),
+    $.getScript("../js/createUIelements.js"),
     $.getScript("../js/chuppaloadFeatures.js"),
     $.getScript("../js/chuppaloadWMS.js"),
     $.getScript("../js/chuppaOnClickActions.js"),

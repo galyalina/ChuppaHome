@@ -23,7 +23,6 @@ var map = new ol.Map({
 
 
 
-var WMSLayer;
 var districtsLayer;
 var buildingsLayer;
 var DBbuildingsLayer;
@@ -51,43 +50,20 @@ var selectedStyle = new ol.style.Style({
 
 function onloadFinished() {
     console.log('onloadFinished');
-    addDistrictSelection();
-    localStorage.trafficlight_on = 0;
+
+    localStorage.wfs_trafficlight_on = 0;
+    localStorage.wfs_green_on = 0;
+
     loadWMSlayer();
-    loadDistricts();
+    loadWMSGreen();
+    loadDistrictsWFSfile();
+
     selectBuildings = new ol.interaction.Select({
         layers: [buildingsLayer]
     });
 
     loadDBBuildings();
-
-    //changeInteractionBuildings();
-    //changeInteraction();
 }
-
-//var changeInteraction = function () {
-//    if (select !== null) {
-//        map.addInteraction(select);
-//        select.on('select', function (e) {
-//            //console.log('select changeInteraction');
-//            var features = select.getFeatures();
-//            var feature = features.item(0);
-//            applayDistrictSelection(feature);
-//        });
-//    }
-//};
-//
-//var changeInteractionBuildings = function () {
-//    if (selectBuildings !== null) {
-//        map.addInteraction(select);
-//        selectBuildings.on('select', function (e) {
-//            //console.log('select changeInteractionBuildings');
-//            var features = selectBuildings.getFeatures();
-//            var feature = features.item(0);
-//            applayDistrictSelection(feature);
-//        });
-//    }
-//};
 
 
 function applayDistrictSelection(feature){

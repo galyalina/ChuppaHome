@@ -1,13 +1,28 @@
-function loadDistricts() {
-    districtsLayer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            url: '../res/berlin_districts_25833.geojson',
-            format: new ol.format.GeoJSON({
-                defaultDataProjection: projection_25833
-            })
+var districtsLoaded = false
 
-        }), style: defaultStyle
+function loadDistrictsWFSfile() {
+
+    var source = new ol.source.Vector({
+        url: '../res/berlin_districts_25833.geojson',
+        format: new ol.format.GeoJSON({
+            defaultDataProjection: projection_25833
+        })
     });
+
+    districtsLayer = new ol.layer.Vector({
+        source: source,
+        style: defaultStyle,
+    });
+
+    var listenerKey = source.on('change', function(e) {
+        if (source.getState() == 'ready') {
+            if(!districtsLoaded) {
+                addDistrictToSelectionDiv();
+            }
+            districtsLoaded = true;
+        }
+    });
+
     map.addLayer(districtsLayer);
 }
 

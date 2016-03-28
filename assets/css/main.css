@@ -7,38 +7,6 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
-
-
-.revealInfo {
-    background-color:#f4f4f4;
-    padding:10px 25px 15px 25px;
-    Margin: 0px 20px 0px 0px;
-}
-.revealLink{
-    font-weight:bold;
-    color:#CCC;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Reset */
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
@@ -2020,11 +1988,11 @@ h3 {
 }
 
 header {
-    margin: 0 0 2em 0;
+    margin: 0 0 1em 0;
 }
 
 header > p {
-    margin: 1em 0 0 0;
+    margin: 0.5em 0 0 0;
 }
 
 footer {
@@ -2166,8 +2134,12 @@ article > .container, article:last-child {
 .map {
     display: inline-block;
     border: 0;
+    padding: 0 0 0 0;
 }
 
+.map_container{
+    padding: 0 0.5em 0 0;
+}
 
 .map.featured {
     display: block;
@@ -2263,6 +2235,20 @@ form input[type="email"],
 form input[type="password"],
 form select {
     line-height: 1.25em;
+}
+
+
+#district_selection{
+    float: right;
+    display: inline-block;
+    font-family: FontAwesome;
+    font-size: 0.8em;
+    text-decoration: none;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 form textarea {
@@ -2564,7 +2550,7 @@ button:active,
 #main > section {
     margin: 0;
     overflow: hidden;
-    padding: 4em 0;
+    padding: 3em 0;
     box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.05), inset 0 0.1em 0.1em 0 rgba(0, 0, 0, 0.025);
     text-align: center;
     background-image: url("images/overlay.png");
@@ -2594,7 +2580,7 @@ button:active,
 }
 
 #main > section.cover {
-    padding: 3.5em 0;
+    padding: 1em 0;
     background-size: cover;
     background-position: center center;
 }

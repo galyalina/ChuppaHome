@@ -1,15 +1,3 @@
-$("#hw_trafficlight").click(function () {
-    if (localStorage.trafficlight_on > 0) {
-        localStorage.trafficlight_on = 0;
-        console.log('Remove WMS');
-        map.removeLayer(WMSLayer);
-    } else {
-        localStorage.trafficlight_on = 1;
-        loadWMSlayer();
-        console.log('Add WMS');
-        map.addLayer(WMSLayer);
-    }
-});
 
 $("#btnClose").click(function () {
     popupLayer.setPosition(undefined);
@@ -32,11 +20,9 @@ $("#district_selection").on('change', function () {
 
 
 function selectDistrictFromFeatures(nameDistrict) {
-
     var featureToBeSelected;
     var localFeatures = districtsLayer.getSource().getFeatures();
     for (var i = 0, l = localFeatures.length; i < l; i++) {
-        //console.log(localFeatures[i].get('name'));
         if (localFeatures[i].get('name') === nameDistrict) {
             featureToBeSelected = localFeatures[i];
             break;
@@ -44,7 +30,6 @@ function selectDistrictFromFeatures(nameDistrict) {
     }
 
     if (!isEmpty(featureToBeSelected)) {
-
         var features = select.getFeatures();
 
         if (!isEmpty(selectedDistrictFeature)) {
@@ -57,6 +42,8 @@ function selectDistrictFromFeatures(nameDistrict) {
         selectedDistrictFeature.setStyle(selectedStyle);
 
         applayDistrictSelection(featureToBeSelected);
+    }else{
+        console.log('No district with this name');
     }
 }
 

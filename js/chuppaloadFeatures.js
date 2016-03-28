@@ -1,95 +1,58 @@
-
 function loadDistricts() {
-     districts = new ol.layer.Vector({
+    districtsLayer = new ol.layer.Vector({
         source: new ol.source.Vector({
             url: '../res/berlin_districts_25833.geojson',
             format: new ol.format.GeoJSON({
                 defaultDataProjection: projection_25833
             })
 
-        })
+        }), style: defaultStyle
     });
-    map.addLayer(districts);
+    map.addLayer(districtsLayer);
 }
 
-function loadBuildings() {
+function loadDBBuildings() {
 
-    //buildingsLayer = new ol.layer.Vector({
-    //    title: "Buildings",
-    //    source: new ol.source.Vector({
-    //        url: '../res/buildings_rent.geojson',
-    //        projection: 'EPSG:4326',
-    //        format: new ol.format.GeoJSON()
-    //    }),
-    //    style: new ol.style.Style({
-    //        stroke: new ol.style.Stroke({
-    //            color: 'blue',
-    //            width: 2
-    //        })
-    //    })
-    //});
-    //
-    //map.addLayer(buildingsLayer);
-
-
-    //var vectorSource25833 = new ol.source.Vector({
-    //    url: '../res/test_25833.geojson',
-    //    format: new ol.format.GeoJSON({
-    //        defaultDataProjection: projection_25833
-    //    })
-    //});
-    //
-    //var buildingsLayer25833 = new ol.layer.Vector({
-    //    source: vectorSource25833,
-    //    style: new ol.style.Style({
-    //        stroke: new ol.style.Stroke({
-    //            color: 'green',
-    //            width: 2
-    //        })
-    //    })
-    //});
-    //
-    //map.addLayer(buildingsLayer25833);
-
-
-    var vectorSourceMitte25833 = new ol.source.Vector({
-        url: '../res/districtMitte_updated.geojson',
+    var buildingsSource = new ol.source.Vector({
+        url: '../res/db.geojson',
         format: new ol.format.GeoJSON({
-            defaultDataProjection: projection_25833
+            defaultDataProjection: "EPSG:3857"
         })
     });
-    var buildingsLayerMitte = new ol.layer.Vector({
-        source: vectorSourceMitte25833,
+    DBbuildingsLayer = new ol.layer.Vector({
+        source: buildingsSource,
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: 'red',
-                width: 1
+                width: 10
             })
         })
     });
 
-    map.addLayer(buildingsLayerMitte);
+    map.addLayer(DBbuildingsLayer);
+    var top = document.getElementById('map').offsetTop; //Getting Y of target element
+    window.scrollTo(0, top);
 }
 
-function loadBuildingsByDistrict(fileName){
+function loadBuildingsByDistrict(fileName) {
     console.log('loadBuildingsByDistrict');
 
-    if(!isEmpty(buildingsLayer)){
+    if (!isEmpty(buildingsLayer)) {
         console.log('Remove');
         map.removeLayer(buildingsLayer);
     }
 
-    var vectorSourceMitte25833 = new ol.source.Vector({
+    var buildingsSource = new ol.source.Vector({
         url: fileName,
         format: new ol.format.GeoJSON({
             defaultDataProjection: projection_25833
         })
     });
     buildingsLayer = new ol.layer.Vector({
-        source: vectorSourceMitte25833,
+        source: buildingsSource,
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
-                color: 'red',
+                color: 'green',
                 width: 1
             })
         })
@@ -99,8 +62,7 @@ function loadBuildingsByDistrict(fileName){
 }
 
 
-
-function loadBuildingsLive(){
+function loadBuildingsLive() {
 
     vectorSource = new ol.source.Vector({
         format: new ol.format.GeoJSON({
@@ -108,7 +70,7 @@ function loadBuildingsLive(){
         }),
         url: function (extent, resolution, projection) {
             return '../php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=10&outputFormat=application/json&srsname=EPSG:25833&bbox='
-                + box_coords.join(',')+ ',EPSG:25833';
+                + box_coords.join(',') + ',EPSG:25833';
         },
         strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
             maxZoom: 19

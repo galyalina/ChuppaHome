@@ -1,6 +1,7 @@
 /**
  * Created by Galya on 28/03/2016.
  */
+
 function addDistrictToSelectionDiv() {
     $.getJSON("../res/berlin_districts_25833.geojson", function (json) {
         // get reference to select element

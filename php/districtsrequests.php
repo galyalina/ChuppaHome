@@ -9,6 +9,14 @@ if (empty($_GET)) {
         return;
     }
     else {
+
+        $updated = $_GET['updated'];
+
+        if(file_exists($updated)){
+            echo 'updated file '.$_GET['updated'].' already exists';
+            return;
+        }
+
         $in = $_GET['file'];
         //echo $in;
 

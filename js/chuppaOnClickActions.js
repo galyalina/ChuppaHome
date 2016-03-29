@@ -1,3 +1,6 @@
+/**
+ * Created by Galya on 22/03/2016.
+ */
 
 $("#btnClose").click(function () {
     popupLayer.setPosition(undefined);

@@ -1,14 +1,16 @@
+/**
+ * Created by Galya on 22/03/2016.
+ */
+
+
 proj4.defs("EPSG:25833", "+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 var projection_25833 = ol.proj.get('EPSG:25833');
-
 var msgContainer = document.getElementById('msgBox');
 var msgContent = document.getElementById('msgContent');
-
 var popupLayer = new ol.Overlay(({
     element: msgContainer,
     autoPan: true
 }));
-
 var map = new ol.Map({
     target: 'map',
     layers: [
@@ -16,17 +18,14 @@ var map = new ol.Map({
     ],
     view: new ol.View({
         center: ol.proj.transform([13.4, 52.512181], 'EPSG:4326', 'EPSG:3857'),
-        zoom: 12
+        zoom: 15
     }),
     overlays: [popupLayer],
 });
-
-
-
 var districtsLayer;
 var buildingsLayer;
 var DBbuildingsLayer;
-
+var districtsLoaded = false
 var select = new ol.interaction.Select({
     condition: ol.events.condition.click
 });
@@ -66,11 +65,11 @@ function onloadFinished() {
 }
 
 
-function applayDistrictSelection(feature){
+function applayDistrictSelection(feature) {
     var id_district = feature.get('name');
 
     if (!isEmpty(id_district)) {
-        console.log('applayDistrictSelection '+id_district);
+        console.log('applayDistrictSelection ' + id_district);
 
         id_district = id_district.replace(/\s+/g, '');
 
@@ -81,9 +80,10 @@ function applayDistrictSelection(feature){
         var district_url = 'SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&outputFormat=application/json&srsname=EPSG:25833&bbox='
             + box_coords1_25833.join(',') + ',' + box_coords2_25833.join(',') + ',EPSG:25833';
 
-        $.get("../php/districtsrequests.php?file=../res/district" + id_district + ".geojson" + "&" + district_url, (function (data) {
-            console.log('PHP response : ' + data);
+        console.log("../php/districtsrequests.php?updated=../res/district" + id_district + "_updated.geojson" + "&file=../res/district" + id_district + ".geojson" + "&" + district_url);
 
+        $.get("../php/districtsrequests.php?updated=../res/district" + id_district + "_updated.geojson" + "&file=../res/district" + id_district + ".geojson" + "&" + district_url, (function (data) {
+            console.log('PHP response : ' + data);
             console.log('Update district file  : ' + "../php/chuppajsonadapter.php?file=../res/district" + id_district + ".geojson&file_out=../res/district" + id_district + "_updated.geojson");
 
             $.get("../php/chuppajsonadapter.php?file=../res/districtMitte.geojson&file=../res/district" + id_district + ".geojson&file_out=../res/district" + id_district + "_updated.geojson", (function (data) {
@@ -107,10 +107,9 @@ $("#save_to_db_form").on('click', function () {
 });
 
 
+function writeBuildingToDB() {
 
-function writeBuildingToDB(){
-
-    if(isEmpty(selectedBuildingDBCandidate)){
+    if (isEmpty(selectedBuildingDBCandidate)) {
         alert("Please select building for rent");
         return false;
     }
@@ -146,13 +145,13 @@ function writeBuildingToDB(){
 }
 
 
-function writeFeatureToJson(feature){
+function writeFeatureToJson(feature) {
     var format = new ol.format.GeoJSON()
     var data;
     try {
         data = format.writeFeatures([feature]);
         console.log('data : ' + data);
-        $.get("../php/writeFeature.php?data="+data, (function (data) {
+        $.get("../php/writeFeature.php?data=" + data, (function (data) {
             console.log('PHP response : ' + data);
             loadDBBuildings();
         }));

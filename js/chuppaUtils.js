@@ -1,3 +1,7 @@
+/**
+ * Created by Galya on 22/03/2016.
+ */
+
 function isEmpty(obj) {
 
     // null and undefined are "empty"

@@ -1,4 +1,7 @@
-var districtsLoaded = false
+/**
+ * Created by Galya on 22/03/2016.
+ */
+
 
 function loadDistrictsWFSfile() {
 
@@ -14,9 +17,9 @@ function loadDistrictsWFSfile() {
         style: defaultStyle,
     });
 
-    var listenerKey = source.on('change', function(e) {
+    var listenerKey = source.on('change', function (e) {
         if (source.getState() == 'ready') {
-            if(!districtsLoaded) {
+            if (!districtsLoaded) {
                 addDistrictToSelectionDiv();
             }
             districtsLoaded = true;
@@ -39,7 +42,7 @@ function loadDBBuildings() {
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: 'red',
-                width: 10
+                width: 3
             })
         })
     });
@@ -103,8 +106,4 @@ function loadBuildingsLive() {
     });
 
     map.addLayer(vector);
-    //http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/re_alkis_gebaeude?service=wfs&version=1.1.0&outputFormat=application/json&request=GetFeature&typeName=fis:re_alkis_gebaeude&srsname=EPSG:25833&FILTER=%3CFilter%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3EGebaeudefunktion_bezeichnung%3C/PropertyName%3E%3CLiteral%3EWohnhaus%3C/Literal%3E%3C/PropertyIsEqualTo%3E%3C/Filter%3E
-
-    //http://localhost:63342/CuppaHome/php/chuppaproxy.php?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833&bbox=400284.2382759188,5803824.444589877,1516510.6411778966,6878109.5532133,EPSG:25833
-    //http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/re_alkis_gebaeude?SERVICE=WFS&VERSION=1.0.0&REQUEST=getfeature&TYPENAME=fis:re_alkis_gebaeude&MAXFEATURES=1000&outputFormat=application/json&srsname=EPSG:25833&bbox=400284.2382759188,5803824.444589877,1516510.6411778966,6878109.5532133,EPSG:25833
 }
